@@ -1,27 +1,37 @@
 var canvas;
 var draw;
 
+const FPS = 30;
+
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 const BACKGROUND_COLOR = "black";
 
 var gameOver = false;
+var carName = "Blue Car";
+var car2Name = "Green Car";
+
+var p1 = new carClass();
+var p2 = new carClass();
 
 window.onload = function () {
     canvas = document.getElementById("game");
     draw = canvas.getContext("2d");
-    carPic.src = "images/player1.png";
 
-    var framesPerSecond = 30;
-    setInterval(function () {
-        moveEverything();
-        drawEverything();
-    }, framesPerSecond);
+    loadImages();
 
     draw.textAlign = "center";
 
     initInput();
-    carReset();
+    p2.initCar(car2Pic, car2Name);
+    p1.initCar(carPic, carName);
+}
+
+function startGameAfterLoading() {
+    setInterval(function () {
+        moveEverything();
+        drawEverything();
+    }, FPS);
 }
 
 function moveEverything() {
@@ -29,17 +39,16 @@ function moveEverything() {
         return;
     }
 
-    driveCar();
+    p1.driveCar();
+    p2.driveCar();
 }
 
 function drawEverything() {
-    colorRect(0, 0, canvas.width, canvas.height, BACKGROUND_COLOR);
-
     if (gameOver) {
         // todo: halt game and add function
     } else {
         drawTracks();
-        drawCar();
-        // colorCircle(car1.x, car1.y, CAR_RADIUS, CAR_COLOR);
+        p1.drawCar();
+        p2.drawCar();
     }
 }

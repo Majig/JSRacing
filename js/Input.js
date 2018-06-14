@@ -3,50 +3,48 @@ const UP_ARROW = 38;
 const RIGHT_ARROW = 39;
 const DOWN_ARROW = 40;
 
-var steerLeft = false;
-var accelerate = false;
-var steerRight = false;
-var reverse = false;
-
-const ROUNDSPEED_DECAY_MULT = 0.94;
-const DRIVE_POWER = 0.5;
-const REVERSE_POWER = 0.2;
-const TURN_RATE = 0.03;
-const MIN_TURN_SPEED = 0.5;
+const W_KEY = 87;
+const A_KEY = 65;
+const S_KEY = 83;
+const D_KEY = 68;
 
 function initInput() {
     document.addEventListener("keydown", keyPressed);
     document.addEventListener("keyup", keyReleased);
+    p1.setupControls(UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW);
+    p2.setupControls(W_KEY, S_KEY, A_KEY, D_KEY);
 }
 
 function keyPressed(e) {
-    document.getElementById("debugText").innerHTML = "KeyCode pushed: " + e.keyCode;
-    setKeyHoldState(e.keyCode, true);
+    // document.getElementById("debugText").innerHTML = "KeyCode pushed: " + e.keyCode;
+    setKeyHoldState(e.keyCode, p1, true);
+    setKeyHoldState(e.keyCode, p2, true);
 
     // prevents the key's default function (e.g. scroll the page)
     e.preventDefault();
 }
 
 function keyReleased(e) {
-    document.getElementById("debugText").innerHTML = "KeyCode released: " + e.keyCode;
-    setKeyHoldState(e.keyCode, false);
+    // document.getElementById("debugText").innerHTML = "KeyCode released: " + e.keyCode;
+    setKeyHoldState(e.keyCode, p1, false);
+    setKeyHoldState(e.keyCode, p2, false);
 
     e.preventDefault();
 }
 
-function setKeyHoldState(key, setTo) {
+function setKeyHoldState(key, car, setTo) {
     switch (key) {
-        case LEFT_ARROW:
-            steerLeft = setTo;
+        case car.steerLeftKey:
+            car.steerLeft = setTo;
             break;
-        case UP_ARROW:
-            accelerate = setTo;
+        case car.accelerateKey:
+            car.accelerate = setTo;
             break;
-        case RIGHT_ARROW:
-            steerRight = setTo;
+        case car.steerRightKey:
+            car.steerRight = setTo;
             break;
-        case DOWN_ARROW:
-            reverse = setTo;
+        case car.reverseKey:
+            car.reverse = setTo;
             break;
         default:
             return;
@@ -56,8 +54,6 @@ function setKeyHoldState(key, setTo) {
 // test-function for click-listener
 function mouseClicked(e) {
     console.log("click noticed");
-    // car1.x = e.clientX;
-    // car1.y = e.clientY;
 }
 
 // returns calculateMousePos.x and calculateMousePos.y values
